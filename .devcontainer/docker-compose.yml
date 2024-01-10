@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  amazonlinux2023:
+    image: "amazonlinux2023:laravel_test"
+    build: ./al2023
+    container_name: laravel_test
+    privileged: true
+    ports:
+      - 8080:80
+    volumes:
+      - ./al2023/conf/etc/hosts:/etc/hosts
+      - ./al2023/conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./al2023/conf/php/php.ini:/etc/php.ini
+      - ./al2023/conf/php-fpm/php-fpm.conf:/etc/php-fpm.conf
+      - ./al2023/conf/php-fpm/www.conf:/etc/php-fpm.d/www.conf
+      - ../:/usr/share/nginx
+    tty: true
+  mysql:
+    image: mysql:8.0.28
+    container_name: laravel_test_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: demo
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./al2023/conf/mysql/my.conf:/etc/mysql/conf.d/my.cnf
